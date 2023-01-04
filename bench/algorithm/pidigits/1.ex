@@ -1,7 +1,6 @@
-import Math
-
 defmodule App do
   def main(args) do
+    File.write!("alive", "#{System.os_time(:millisecond)}")
     n = String.to_integer(Enum.at(args,0,"27"), 10)
     loop(1,4,3,1,1,n)
   end

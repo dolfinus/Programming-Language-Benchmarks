@@ -1,5 +1,6 @@
 defmodule App do
   def main(args) do
+    File.write!("alive", "#{System.os_time(:millisecond)}")
     n = String.to_integer(Enum.at(args,0,"27"), 10)
     generate(n)
   end

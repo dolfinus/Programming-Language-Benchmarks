@@ -2,6 +2,7 @@ import Math
 
 defmodule App do
   def main(args) do
+    File.write!("alive", "#{System.os_time(:millisecond)}")
     n = String.to_integer(Enum.at(args,0,"10"), 10)
     u = create_list(1.0, n)
     v = create_list(1.0, n)
@@ -10,7 +11,7 @@ defmodule App do
     v = elem(tuple,1)
     vbv = product(u,v)
     vv = product(v,v)
-    ans = sqrt(vbv / vv)
+    ans = Math.sqrt(vbv / vv)
     IO.puts("#{:erlang.float_to_binary(ans, [decimals: 9])}")
   end
 

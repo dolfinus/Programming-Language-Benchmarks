@@ -136,12 +136,19 @@
               </th>
               <th class="text-right">code</th>
               <!-- <th class="text-right">N</th> -->
-              <th class="text-right" title="total time">time</th>
+              <th class="text-right" title="total time">total time</th>
               <th
                 :class="['text-right', mdHide]"
                 title="total time standard deviation"
               >
-                stddev
+                total stddev
+              </th>
+              <th class="text-right" title="real time">VM start time</th>
+              <th
+                :class="['text-right', mdHide]"
+                title="real time standard deviation"
+              >
+                VM start stddev
               </th>
               <th class="text-right">
                 <span class="md-hide">peak-mem</span>
@@ -171,7 +178,12 @@
                   v-show="other || problem"
                   :class="['text-left', 'pl-4', mdHide]"
                 >
-                  <a :href="`/${i.lang}`">{{ i.lang }}</a>
+                  <a
+                    :href="`/${i.lang}`"
+                    target="_blank"
+                    class="underline text-blue-500"
+                    >{{ i.lang }}</a
+                  >
                 </td>
                 <td class="text-right">
                   <a
@@ -183,10 +195,16 @@
                 </td>
                 <!-- <td class="text-right">{{ i.input }}</td> -->
                 <td class="text-right">
-                  {{ msToText(i.timeMS) }}
+                  {{ timeToText(i.timeMS) }}
                 </td>
                 <td :class="['text-right', mdHide]">
-                  {{ msToFixed(i.timeStdDevMS) }}ms
+                  {{ timeToText(i.timeStdDevMS) }}
+                </td>
+                <td class="text-right">
+                  {{ vmStartToText(i.vmStartMS) }}
+                </td>
+                <td :class="['text-right', mdHide]">
+                  {{ vmStartToText(i.vmStartStdDevMS) }}
                 </td>
                 <td class="text-right">
                   {{ (i.memBytes / (1024 * 1024)).toFixed(1) }}MB
@@ -306,8 +324,15 @@ export default class LangMetaPage extends Vue {
     this.isMenuOn = !this.isMenuOn
   }
 
-  msToText(ms: number): string {
+  timeToText(ms: number): string {
     return ms <= 0 ? 'timeout' : `${this.msToFixed(ms)}ms`
+  }
+
+  vmStartToText(ms: number | null): string {
+    if (ms == null) {
+      return '-'
+    }
+    return `${this.msToFixed(ms)}ms`
   }
 
   msToFixed(ms: number): string {
@@ -410,12 +435,13 @@ export default class LangMetaPage extends Vue {
           'input',
           'timeout',
           'timeMS',
+          'vmStartMS',
           'os',
           'lang',
           'compiler',
           'compilerVersion',
         ],
-        ['asc', 'asc', 'asc', 'asc', 'asc', 'asc', 'asc']
+        ['asc', 'asc', 'asc', 'asc', 'asc', 'asc', 'asc', 'asc']
       )
     }
 

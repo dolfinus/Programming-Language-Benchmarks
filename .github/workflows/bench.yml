@@ -17,44 +17,44 @@ jobs:
       matrix:
         os: [ubuntu-22.04]
         lang: [
-            acton,
-            c,
-            chapel,
-            codon,
-            cpp,
-            csharp,
-            crystal,
-            d,
-            dart,
-            # elixir,
-            # fortran,
-            go,
-            # hacklang,
-            # haskell,
-            haxe,
-            java,
-            javascript,
-            julia,
-            kotlin,
-            # lisp,
-            lua,
-            # nelua,
-            nim,
-            ocaml,
-            odin,
-            perl,
-            php,
-            # pony,
+            #acton,
+            #c,
+            #chapel,
+            #codon,
+            #cpp,
+            #csharp,
+            #crystal,
+            #d,
+            #dart,
+            elixir,
+            ## fortran,
+            #go,
+            ## hacklang,
+            ## haskell,
+            #haxe,
+            #java,
+            #javascript,
+            #julia,
+            #kotlin,
+            ## lisp,
+            #lua,
+            ## nelua,
+            #nim,
+            #ocaml,
+            #odin,
+            #perl,
+            #php,
+            ## pony,
             python,
-            # racket,
-            ruby,
-            rust,
-            swift,
-            typescript,
-            v,
-            wasm,
-            # wren,
-            zig,
+            ## racket,
+            #ruby,
+            #rust,
+            #swift,
+            #typescript,
+            #v,
+            #wasm,
+            ## wren,
+            #zig,
           ]
     steps:
       - run: lscpu
@@ -90,9 +90,9 @@ jobs:
           # sudo ln -sf $HOME/.rustup/toolchains/nightly-2021-08-28-x86_64-unknown-linux-gnu $HOME/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu
           rustup update nightly
           cargo +nightly --version
-      # - name: Install graal
-      #   if: matrix.lang == 'java' || matrix.lang == 'javascript' || matrix.lang == 'python' || matrix.lang == 'ruby' || matrix.lang == 'wasm'
-      #   run: ./.github/graalvm.sh
+      - name: Install graal
+        if: matrix.lang == 'java' || matrix.lang == 'javascript' || matrix.lang == 'python' || matrix.lang == 'ruby' || matrix.lang == 'wasm'
+        run: ./.github/graalvm.sh
       - name: Install clang deps
         if: matrix.lang == 'c' || matrix.lang == 'cpp'
         run: ./.github/clang.sh
@@ -195,6 +195,12 @@ jobs:
         with:
           ruby-version: 3 # Not needed with a .ruby-version file
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Install elixir
+        if: matrix.lang == 'elixir'
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: "25"
+          elixir-version: "1.14"
       # - name: Install truffleruby
       #   if: matrix.lang == 'ruby'
       #   run: ./.github/truffleruby.sh
@@ -215,7 +221,7 @@ jobs:
         run: |
           source $PROFILE
           pushd bench
-          dotnet run -c Release --project tool -- --task build --langs ${{ matrix.lang }} 
+          dotnet run -c Release --project tool -- --task build --langs ${{ matrix.lang }}
           popd
       - name: Test
         run: |
@@ -257,47 +263,52 @@ jobs:
           echo '# placeholder' > $PROFILE
           sudo apt-get update -y
       - uses: actions/checkout@v3
-      - name: Check CPU Model
-        run: |
-          source $PROFILE
-          pushd bench
-          dotnet run -c Release --project tool -- --task checkcpu
-          popd
-      - run: ./.github/acton.sh
-      - run: ./.github/codon.sh
-      - run: ./.github/clang.sh
-      - run: ./.github/crystal.sh
-      - run: ./.github/dotnet.sh
-      # - run: ./.github/graalvm.sh
-      # - run: ./.github/graalvm-node.sh
-      - run: ./.github/bun.sh
-      # - run: ./.github/truffleruby.sh
-      - run: ./.github/wasm.sh
-      # - run: ./.github/fortran.sh
-      - uses: julia-actions/setup-julia@v1
-      # - run: ./.github/loom.sh
-      - run: ./.github/lua.sh
-      # - run: ./.github/racket.sh
-      - run: ./.github/hashlink.sh
-      # - run: ./.github/hhvm.sh
-      # - run: sudo ./.github/dart.sh
-      - uses: shogo82148/actions-setup-perl@v1
-        with:
-          perl-version: "5"
-          multi-thread: true
-      - name: Install PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.1"
+      #- name: Check CPU Model
+      #  run: |
+      #    source $PROFILE
+      #    pushd bench
+      #    dotnet run -c Release --project tool -- --task checkcpu
+      #    popd
+      #- run: ./.github/acton.sh
+      #- run: ./.github/codon.sh
+      #- run: ./.github/clang.sh
+      #- run: ./.github/crystal.sh
+      #- run: ./.github/dotnet.sh
+      ## - run: ./.github/graalvm.sh
+      ## - run: ./.github/graalvm-node.sh
+      #- run: ./.github/bun.sh
+      ## - run: ./.github/truffleruby.sh
+      #- run: ./.github/wasm.sh
+      ## - run: ./.github/fortran.sh
+      #- uses: julia-actions/setup-julia@v1
+      ## - run: ./.github/loom.sh
+      #- run: ./.github/lua.sh
+      ## - run: ./.github/racket.sh
+      #- run: ./.github/hashlink.sh
+      ## - run: ./.github/hhvm.sh
+      ## - run: sudo ./.github/dart.sh
+      #- uses: shogo82148/actions-setup-perl@v1
+      #  with:
+      #    perl-version: "5"
+      #    multi-thread: true
+      #- name: Install PHP
+      #  uses: shivammathur/setup-php@v2
+      #  with:
+      #    php-version: "8.1"
       - uses: actions/setup-python@v4
         with:
           python-version: "3.x"
           check-latest: true
       - run: ./.github/python.sh
-      - uses: ruby/setup-ruby@v1
+      #- uses: ruby/setup-ruby@v1
+      #  with:
+      #    ruby-version: 3 # Not needed with a .ruby-version file
+      #    bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+      - name: Install elixir
+        uses: erlef/setup-beam@v1
         with:
-          ruby-version: 3 # Not needed with a .ruby-version file
-          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+          otp-version: "25"
+          elixir-version: "1.14"
       - uses: actions/download-artifact@v3
         with:
           name: build

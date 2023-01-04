@@ -2,6 +2,7 @@ import Math
 
 defmodule App do
   def main(args) do
+    File.write!("alive", "#{System.os_time(:millisecond)}")
     n = String.to_integer(Enum.at(args,0,"27"), 10)
     k = binary_search(n)
     {p, q} = sum_terms(0, k-1)
@@ -41,7 +42,7 @@ defmodule App do
 
   defp binary_search(n) do
     {a,b}=binary_search_test_k_1(n,0,1)
-    {a,b}=binary_search_test_k_2(n,a,b)
+    {_a,b}=binary_search_test_k_2(n,a,b)
     b
   end
 
